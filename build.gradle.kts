@@ -11,10 +11,13 @@ repositories {
 
 dependencies {
     //OCR
-    implementation("net.sourceforge.tess4j:tess4j:4.2.1")
+    implementation("net.sourceforge.tess4j:tess4j:5.13.0")
 
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
+    // PDF
+    implementation("org.apache.pdfbox:pdfbox:3.0.2")
 
 }
 

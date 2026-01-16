@@ -1,8 +1,7 @@
 package alien42.tuxbrew.utils
 
 import net.sourceforge.tess4j.Tesseract
-import java.io.InputStream
-import javax.imageio.ImageIO
+import java.awt.image.BufferedImage
 
 /**
  * This class parses data using a tesseract OCR parser.
@@ -13,10 +12,14 @@ class TesseractOcrParser {
         setLanguage("eng")
     }
 
-    fun generateTextFromImage(imageStream : InputStream) : String {
-        val image = ImageIO.read(imageStream)
-            ?: throw IllegalStateException("Invalid image input stream") // TODO handle this error
+    fun setWhiteList() {
+        tesseract.setVariable(
+            "tessedit_char_whitelist",
+            "0123456789"
+        )
+    }
 
+    fun generateTextFromImage(image : BufferedImage) : String {
         return tesseract.doOCR(image)
     }
 }

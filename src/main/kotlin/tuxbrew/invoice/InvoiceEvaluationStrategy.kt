@@ -2,6 +2,12 @@ package alien42.tuxbrew.invoice
 
 import alien42.tuxbrew.utils.Money
 import alien42.tuxbrew.utils.TesseractOcrParser
+import org.apache.pdfbox.Loader
+import org.apache.pdfbox.io.RandomAccessRead
+import org.apache.pdfbox.io.RandomAccessReadBuffer
+import org.apache.pdfbox.rendering.ImageType
+import org.apache.pdfbox.rendering.PDFRenderer
+import java.awt.image.BufferedImage
 import java.io.InputStream
 
 /**
@@ -43,8 +49,30 @@ abstract class InvoiceEvaluationStrategy protected constructor(val format: Invoi
 class Sauder2025InvoiceEvaluationStrategy(val tax: UInt) : InvoiceEvaluationStrategy(InvoiceEvaluationFormat.Sauder2025) {
     override fun evaluate(data: InputStream): List<InvoiceEvaluationEntry> {
         val parser = TesseractOcrParser()
-        TODO("Not yet implemented $parser, ${Money.ofCents(0u).convertNettoToBrutto()}")
+        parser.setWhiteList()
+        //TODO("Not yet implemented $parser, ${Money.ofCents(0u).convertNettoToBrutto()}")
+
+        val images = pdfToImg(data)
+
+        val entry : InvoiceEvaluationEntry = InvoiceEvaluationEntry("test", 5u, Money.ofDouble(1.0).convertNettoToBrutto())
+        println(parser.generateTextFromImage(images[0]))
+        return listOf(entry)
     }
 
     private fun Money.convertNettoToBrutto() = this + this * (tax.toDouble() / 100.0)
+}
+
+private fun pdfToImg(pdfStream : InputStream) : List<BufferedImage> {
+    val randomAccess: RandomAccessRead = RandomAccessReadBuffer(pdfStream)
+
+    Loader.loadPDF(randomAccess).use { document ->
+        val renderer = PDFRenderer(document)
+        return (0 until document.numberOfPages).map { pageIndex ->
+            renderer.renderImageWithDPI(
+                pageIndex,
+                300f,
+                ImageType.GRAY
+            )
+        }
+    }
 }
