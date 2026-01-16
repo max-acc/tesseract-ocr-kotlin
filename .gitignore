@@ -29,3 +29,7 @@ replay_pid*
 # Data files
 data/
 tessdata/
+build/
+.kotlin/
+.idea/
+.gradle/
