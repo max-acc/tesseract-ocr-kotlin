@@ -10,7 +10,12 @@ repositories {
 }
 
 dependencies {
-    testImplementation(kotlin("test"))
+    //OCR
+    implementation("net.sourceforge.tess4j:tess4j:4.2.1")
+
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
 }
 
 tasks.test {
