@@ -3,6 +3,12 @@ package alien42.tuxbrew.utils
 import net.sourceforge.tess4j.Tesseract
 import java.awt.image.BufferedImage
 
+enum class CHARS(val content: String) {
+    ALPHANUMERIC("abcdefghijklmnopqrstuvwxyzäöüABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜ"),
+    NUMERIC("0123456789"),
+    SPECIAL(".,€$%"),
+}
+
 /**
  * This class parses data using a tesseract OCR parser.
  */
@@ -12,10 +18,10 @@ class TesseractOcrParser {
         setLanguage("eng")
     }
 
-    fun setWhiteList() {
+    fun setWhiteList(charSet: String) {
         tesseract.setVariable(
             "tessedit_char_whitelist",
-            "0123456789"
+            charSet,
         )
     }
 
